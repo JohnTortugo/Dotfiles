@@ -1,0 +1,13 @@
+ctrlp.vim
+neobundle.vim
+neosnippet-snippets
+neosnippet.vim
+nerdtree
+nerdtree-git-plugin
+syntastic
+tagbar
+vim-airline
+vim-colorschemes
+vim-fugitive
+vim-sensible
+vimshell
