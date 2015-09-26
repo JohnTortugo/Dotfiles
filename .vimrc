@@ -29,10 +29,22 @@
 		NeoBundle 'Xuyuanp/nerdtree-git-plugin'
 		NeoBundle 'majutsushi/tagbar'
 		NeoBundle 'scrooloose/syntastic'
+        NeoBundle 'MarcWeber/vim-addon-mw-utils'
+        NeoBundle 'tomtom/tlib_vim'
+		NeoBundle 'honza/vim-snippets.git'
+		NeoBundle 'garbas/vim-snipmate'
+		NeoBundle 'tpope/vim-fugitive'
+
+		" Did not like these too much:
 		"NeoBundle 'ervandew/supertab'
 		"NeoBundle 'Valloric/YouCompleteMe'
 		"NeoBundle 'rdnetto/YCM-Generator'
-		"NeoBundle 'Rip-Rip/clang_complete'
+		
+		" I use these but without NeoBundle support
+		" 	A.vim
+		" 	Bclose.vim
+		" 	Clang Complete
+		" 	Nerd Commenter
 
 		" You can specify revision/branch/tag.
 		NeoBundle 'Shougo/vimshell', { 'rev' : '3787e5' }
@@ -122,6 +134,7 @@
 	autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 
 
+	"set g:NERDTreeHighlightCursorline=1
 
 " End configuration ---------------------
 " ---------------------------------------------
@@ -171,11 +184,12 @@
 " ---------------------------------------------
 " Clang-complete configuration -------------------------
 
+	let g:clang_user_options='|| exit 0'
+	let g:clang_library_path = '/usr/lib/llvm-3.5/lib/'
 	let g:clang_use_library=1
-	let g:clang_library_path = '/usr/lib/llvm-3.5/lib'
 	let g:clang_sort_algo = 'alpha'
 	let g:clang_memory_percent=70
-	"let g:clang_jumpto_declaration_key='<C-j>'
+	let g:clang_jumpto_declaration_key='<F4>'
 	
 	" Open quick-fix on error
 	let g:clang_complete_copen=1
@@ -220,13 +234,17 @@
 
 " ---------------------------------------------
 " General configs -----------------------------
+	colorscheme molokai
+
+	set gfn=Inconsolata\ for\ Powerline\ Medium\ 8
+
 
 	" Set the leader key
 	let mapleader = '\\'
 
 	" configure folding behavior
-	set foldmethod=syntax
-	set foldcolumn=3     
+	" set foldmethod=syntax
+	" set foldcolumn=3     
 
 	" Enable the use of the mouse
 	set mouse=a
@@ -238,6 +256,10 @@
 
 	" Let we change the buffer of the current window without saving it
 	set hidden
+
+	" Disable search highlight when we enter insert mode
+	autocmd InsertEnter * :setlocal nohlsearch
+	autocmd InsertLeave * :setlocal hlsearch
 
 	set encoding=utf-8
 	set fillchars+=stl:\ ,stlnc:\
@@ -256,7 +278,6 @@
 	set tabstop=4				" tab width is 4 spaces
 	set shiftwidth=4			" identation is also 2 spaces
 	set backspace=indent,eol,start		" allow backspacing over everything
-	set guifont=Andale\ Mono\ 8 
 	set whichwrap+=<,>,h,l,[,]			" let the cursor jump to the previous/next line when moving
 	"set relativenumber
 
@@ -311,7 +332,8 @@
 	map <C-w> <Plug>Kwbd<CR>
 
 	" Shows NERDTree with Ctrl+N
-	map <C-n> :NERDTreeToggle<CR>
+	nmap <C-n> :NERDTreeToggle<CR>
+	" nmap <C-n> :NERDTreeToggle <BAR> wincmd h<CR> <BAR> /
 
 	" This enable easy moving between windows
 	nnoremap <C-h> <C-w>h
@@ -319,13 +341,29 @@
 	nnoremap <C-k> <C-w>k
 	nnoremap <C-l> <C-w>l
 
+	" Enable text search with Ctrl-f
+	nmap <C-f> /
+	imap <C-f> <Esc>/
+
+	" Switch between header and source files
+	imap <C-Tab> <Esc>:A<CR>a
+	map <C-Tab> :A<CR>
+
+	" Toggle commentaries
+	map <C-S-c> <plug>NERDCommenterInvert<CR>
+
 	" Toggle appearance of the Exuberang CTags Tagbar
 	nmap <F8> :TagbarToggle<CR>
 
-	"map <F4> :ClangGotoDeclaration()
+	" Execute the project
+	nmap <F9> :wa <BAR> !make run<CR>
 
-	nnoremap <silent> <C-S> :<C-u>Update<CR>
-	inoremap <silent> <C-S> <Esc>:<C-u>Update<CR>a
+	" Rebuild and execute
+	nmap <F10> :wa <BAR> !make rebuild-run<CR>
+
+	" Save the source
+	nmap <silent> <C-S> :update<CR>
+	imap <silent> <C-S> <Esc>:update<CR>a
 
 
 
