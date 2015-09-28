@@ -34,8 +34,9 @@
 		NeoBundle 'honza/vim-snippets.git'
 		NeoBundle 'garbas/vim-snipmate'
 		NeoBundle 'tpope/vim-fugitive'
+		NeoBundle 'terryma/vim-multiple-cursors'
 
-		" Did not like these too much:
+		" Did not like these:
 		"NeoBundle 'ervandew/supertab'
 		"NeoBundle 'Valloric/YouCompleteMe'
 		"NeoBundle 'rdnetto/YCM-Generator'
@@ -115,7 +116,6 @@
 		hi CursorLine ctermbg=black ctermfg=gray
 	endfunction
 
-
 " End CtrlP configuration ---------------------
 " ---------------------------------------------
 
@@ -123,24 +123,39 @@
 
 
 " ---------------------------------------------
-" NerdTree configuration -------------------------
+" Begin NERDTree configuration -------------------------
+" This plugin is useful for navigating in the directory/file system hierarchy.
+" Useful mappings are:
+" 	<F8>	Toggle visibility
+" 	<C-m>	Toggle the folding of the current folder
 
 	" Close vim if the only window left is the NERDTree
 	" autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 
+	" Tells nerdtree to not display .o files
+	let NERDTreeIgnore=['\.o$', '\.png', '\.pdf']
 
 	" Open a NERDTree automatically when vim starts up if no files were specified
 	autocmd StdinReadPre * let s:std_in=1
 	autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 
+	" set g:NERDTreeHighlightCursorline=1
 
-	"set g:NERDTreeHighlightCursorline=1
-
-" End configuration ---------------------
+" End NERDTree configuration ---------------------
 " ---------------------------------------------
 
 
 
+" ---------------------------------------------
+" Begin Tagbar configuration -------------------------
+" This plugin is useful for showing the Ctags of the current file.
+" 	<F8>	Toggle visibility
+
+	let g:tagbar_left=1
+
+
+" End Tagbar configuration ---------------------
+" ---------------------------------------------
 
 
 
@@ -228,6 +243,35 @@
 
 " End Clang-complete configuration ---------------------
 " ---------------------------------------------
+
+
+
+" ----------------------------------------------------------------------------
+" Multiple-cursors configs ---------------------------------------------------
+" This plugin is interesting because it enable us to make changes
+" in several places at the same time. Useful for refactoring.
+
+	" Disable default mappings
+	let g:multi_cursor_use_default_mapping=0
+
+	" When we press this we enter in multi cursor mode or goes to next match
+	let g:multi_cursor_next_key='<C-c>'
+
+	" Go to prev match
+	let g:multi_cursor_prev_key='<C-z>'
+
+	" Ignore this match
+	let g:multi_cursor_skip_key='<C-x>'
+
+	" Exit multicursor match
+	let g:multi_cursor_quit_key='<Esc>'
+
+	highlight multiple_cursors_cursor term=reverse cterm=reverse gui=reverse
+	highlight link multiple_cursors_visual Visual
+
+" End multiple-cursors configuration ---------------------
+" ---------------------------------------------
+
 
 
 
@@ -327,13 +371,9 @@
 	" Key mappings and remappings
 	
 	" Remap page up/down to navigate between buffers
-	map <C-PageUp> :bp<CR>
-	map <C-PageDown> :bn<CR>
-	map <C-w> <Plug>Kwbd<CR>
-
-	" Shows NERDTree with Ctrl+N
-	nmap <C-n> :NERDTreeToggle<CR>
-	" nmap <C-n> :NERDTreeToggle <BAR> wincmd h<CR> <BAR> /
+	map <A-h> :bp<CR>
+	map <A-l> :bn<CR>
+	map <A-w> <Plug>Kwbd<CR>
 
 	" This enable easy moving between windows
 	nnoremap <C-h> <C-w>h
@@ -352,8 +392,9 @@
 	" Toggle commentaries
 	map <C-S-c> <plug>NERDCommenterInvert<CR>
 
-	" Toggle appearance of the Exuberang CTags Tagbar
-	nmap <F8> :TagbarToggle<CR>
+	" Toggle between the window of NERDtree (showing files) and that of
+	" Tagbar (Exuberang CTags)
+	nmap <F8> :call SwitchLeftPannel()<CR>
 
 	" Execute the project
 	nmap <F9> :wa <BAR> !make run<CR>
@@ -370,5 +411,33 @@
 
 " End General configs -------------------------
 " ---------------------------------------------
+
+
+
+
+" ---------------------------------------------
+" Begin my custom funcs -------------------------
+
+function SwitchLeftPannel()
+ 	if exists("g:isNerdTreeVisible") == 0
+ 		let g:isNerdTreeVisible = 0
+ 	endif
+ 
+	if g:isNerdTreeVisible == 1 
+		NERDTreeClose
+		TagbarOpen
+		wincmd h
+	else
+		TagbarClose
+		NERDTree
+	endif
+
+	let g:isNerdTreeVisible = ! g:isNerdTreeVisible
+endfunction
+
+
+" End my custom funcs -------------------------
+" ---------------------------------------------
+
 
 
