@@ -139,7 +139,16 @@
 	autocmd StdinReadPre * let s:std_in=1
 	autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 
-	" set g:NERDTreeHighlightCursorline=1
+	let NERDTreeHighlightCursorline=1
+	
+	" Disables display of the 'Bookmarks' label and 'Press ? for help' text
+	let NERDTreeMinimalUI=1
+
+	" Automatically open subdir if parent has only one child dir
+	let NERDTreeCascadeOpenSingleChildDir=1
+
+	" size of the NERD tree
+	let NERDTreeWinSize=31
 
 " End NERDTree configuration ---------------------
 " ---------------------------------------------
@@ -153,6 +162,14 @@
 
 	let g:tagbar_left=1
 
+	" Width of the Tagbar window in characters.
+	let g:tagbar_width=31
+
+	" move to the Tagbar window when it is opened.
+	let g:tagbar_autofocus = 1
+
+	" does not show the help message at the top
+	let g:tagbar_compact = 1
 
 " End Tagbar configuration ---------------------
 " ---------------------------------------------
