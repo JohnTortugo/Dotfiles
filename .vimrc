@@ -1,4 +1,58 @@
 "----------------------------------------------
+" Summary of key mappings and notes -----------
+"
+" Notes:
+" 	Update the NeoBundle path
+" 	Update the Clang-Complete path
+" 	Update the Fortune/Cowsay path
+" 	Update the Language tool path
+"
+" General Mappings:
+" <leader>ev	-> Edit .vimrc
+" <leader>sv	-> Source .vimrc
+" 
+" C-S-c 		-> Toggle comment of the selected lines
+" C-f 			-> Activate search
+" A-p			-> Open CtrlP file search
+" C-s			-> Save the current file
+" C-A-f 		-> Format the current paragraph with 80 columns
+" C-Tab			-> switch between .c/.h or .cpp/.h
+" C-p			-> find files using CtrlP
+" A-p       	-> find buffer by name using CtrlP
+" C-m			-> Toggle the folding of the current folder
+" C-f 			-> Search inside the current file
+" 
+" C-h			-> Move to the right window 
+" C-j			-> Move to the window below
+" C-k			-> Move to the window above
+" C-l			-> Move to the left window 
+"
+" A-h			-> Move to the left tab
+" C-PageUp		-> Move to the left tab
+" A-l			-> Move to the right tab
+" C-PageDown	-> Move to the right tab
+" A-w			-> Close the current tab
+"
+" F2			-> Enable the spell and english grammar checker 
+" F8			-> Toggle NerdTree/Taglist visibility
+" F9			-> Execute make run
+" F10			-> Execute make rebuild-run
+" 
+" Multicursor:
+" C-c			-> Enter in multi cursor mode or goes to next match
+" C-z 	 		-> Go to prev match
+" C-x	 		-> Ignore this match
+
+
+
+"----------------------------------------------
+" End of summary mappings ---------------------
+
+
+
+
+
+"----------------------------------------------
 "NeoBundle Scripts-----------------------------
 		if has('vim_starting')
 			if &compatible
@@ -35,6 +89,8 @@
 		NeoBundle 'garbas/vim-snipmate'
 		NeoBundle 'tpope/vim-fugitive'
 		NeoBundle 'terryma/vim-multiple-cursors'
+		NeoBundle 'mhinz/vim-startify'
+"		NeoBundle 'languagetool-org/languagetool'
 
 		" Did not like these:
 		"NeoBundle 'ervandew/supertab'
@@ -46,6 +102,7 @@
 		" 	Bclose.vim
 		" 	Clang Complete
 		" 	Nerd Commenter
+		" 	LanguageTool (the tool + vim plugin)
 
 		" You can specify revision/branch/tag.
 		NeoBundle 'Shougo/vimshell', { 'rev' : '3787e5' }
@@ -105,16 +162,11 @@
 	" When a file with the given name is found the folder is considered
 	" the root folder
 	" let g:ctrlp_root_markers = ['']
+	
+
+	let g:ctrlp_extensions = ['tag', 'buffertag', 'quickfix', 'dir', 'rtscript', 'undo', 'line', 'changes', 'mixed', 'bookmarkdir']
 
 	let g:ctrlp_buffer_func = { 'enter': 'BrightHighlightOn', 'exit':  'BrightHighlightOff', }
-
-	function BrightHighlightOn()
-		hi CursorLine ctermbg=gray ctermfg=black
-	endfunction
-
-	function BrightHighlightOff()
-		hi CursorLine ctermbg=black ctermfg=gray
-	endfunction
 
 " End CtrlP configuration ---------------------
 " ---------------------------------------------
@@ -130,14 +182,14 @@
 " 	<C-m>	Toggle the folding of the current folder
 
 	" Close vim if the only window left is the NERDTree
-	" autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+	autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 
-	" Tells nerdtree to not display .o files
+	" Tells nerdtree to not display binary files
 	let NERDTreeIgnore=['\.o$', '\.png', '\.pdf']
 
 	" Open a NERDTree automatically when vim starts up if no files were specified
-	autocmd StdinReadPre * let s:std_in=1
-	autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+	" autocmd StdinReadPre * let s:std_in=1
+	" autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 
 	let NERDTreeHighlightCursorline=1
 	
@@ -293,54 +345,107 @@
 
 
 
+
+" ----------------------------------------------------------------------------
+" Begin Startify configs ---------------------------------------------------
+
+	" This will make Startify and NERDTree work properly together (at startup)
+	" I.e., will open nerdtree (when no file is specified as parameter) and
+	" also show the startify buffer.
+    autocmd VimEnter *
+	                \   if !argc()
+	                \ |   Startify
+	                \ |   NERDTree
+	                \ |   wincmd w
+	                \ | endif
+
+	" This is reaaaaaaallyyy coool man, it will change the opening buffer of
+	" vim to a more cooler one =)))
+	let g:startify_custom_header = map(split(system('fortune | cowsay -f $(find /usr/local/share/cows/ | shuf -n1)'), '\n'), '"   ". v:val') + ['','']
+
+	" Make NERDTree reuse the Startify buffer
+	autocmd User Startified setlocal buftype=
+
+" End Startify configuration ---------------------
+" ---------------------------------------------
+
+
+
+
+
+
+" ----------------------------------------------------------------------------
+" Begin LanguageTool configs ---------------------------------------------------
+
+	let g:languagetool_jar='/opt/LanguageTool-3.1/languagetool-commandline.jar'
+
+" End LanguageTool configuration ---------------------
+" ---------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
 " ---------------------------------------------
 " General configs -----------------------------
 	colorscheme molokai
 
-	set gfn=Inconsolata\ for\ Powerline\ Medium\ 8
-
-
 	" Set the leader key
-	let mapleader = '\\'
+	" let mapleader = '\\'
 
 	" configure folding behavior
 	" set foldmethod=syntax
 	" set foldcolumn=3     
+	
+	"set relativenumber
 
-	" Enable the use of the mouse
-	set mouse=a
 
-	" Shows the line number
-	set number
 
-	" Enable syntax highlight
+	set encoding=utf-8
+	set mouse=a									" Enable the use of the mouse
+	set number									" Shows the line number
+	set hidden									" Let we change the buffer of the current window without saving it
+	set nowrap									" Do not wrap lines
+	set tabstop=4								" tab width is 4 spaces
+	set backspace=indent,eol,start				" allow backspacing over everything
+	set autoindent								" always set autoindenting on
+	set copyindent								" Copy the previous indentation on autoindenting
+	set shiftwidth=4							" identation is also 4 spaces
+	set shiftround    							" use multiple of shiftwidth when indenting with '<' and '>'
+	set showmatch     							" set show matching parenthesis
+	set ignorecase    							" ignore case when searching
+	set smartcase     							" ignore case if search pattern is all lowercase, case-sensitive otherwise
+	set smarttab      							" insert tabs on the start of a line according to shiftwidth, not tabstop
+	set hlsearch      							" highlight search terms
+	set incsearch     							" show search matches as you type
+	set whichwrap+=<,>,h,l,[,]					" let the cursor jump to the previous/next line when moving
+	set history=1000         					" remember more commands and search history
+	set undolevels=1000      					" use many muchos levels of undo
+	set wildignore=*.swp,*.bak,*.pyc,*.class
+	set title                					" change the terminal's title
+	"set visualbell           					" don't beep
+	set noerrorbells         					" don't beep
+	set fillchars+=stl:\ ,stlnc:\
+	set nocompatible
+	set nobackup
+	set noswapfile
+	set ruler
+	set showcmd
+	set cursorline
 
-	" Let we change the buffer of the current window without saving it
-	set hidden
+	cmap w!! w !sudo tee % >/dev/null
 
 	" Disable search highlight when we enter insert mode
 	autocmd InsertEnter * :setlocal nohlsearch
 	autocmd InsertLeave * :setlocal hlsearch
 
-	set encoding=utf-8
-	set fillchars+=stl:\ ,stlnc:\
-	set number
-	set nocompatible
-	set nobackup
-	set ruler
-	set showcmd
-	set incsearch
-	set hlsearch
-	set smartcase
-	set autoindent
-	set showmatch
-	set cursorline
-	set history=50
-	set tabstop=4				" tab width is 4 spaces
-	set shiftwidth=4			" identation is also 2 spaces
-	set backspace=indent,eol,start		" allow backspacing over everything
-	set whichwrap+=<,>,h,l,[,]			" let the cursor jump to the previous/next line when moving
-	"set relativenumber
 
 	" required to always show the status bar of 'powerline'
 	set laststatus=2
@@ -348,11 +453,8 @@
 	" syntax highlight
 	syntax on								
 
-	" enable plugins (seem be the default but...)
-	filetype plugin on					
-
-	" Automatically reload .vimrc when it's saved
-	" au BufWritePost .vimrc so ~/.vimrc
+	" enable plugins loading and indentation based on filetype
+	filetype plugin indent on					
 
 	" This enable using a GUI colorscheme in a terminal window
 "	set t_Co=256
@@ -386,11 +488,25 @@
 	" -------------------------------------
 	" -------------------------------------
 	" Key mappings and remappings
-	
+
+	" Remap ';' as ':'	WTF!! now I don't need shift anymore =)))
+	nnoremap	;	:
+	" nnoremap 	:	<nop>
+
+	" Reselect visual block after indent/outdent
+	vnoremap < <gv
+	vnoremap > >gv
+
+	" Quickly edit/reload the vimrc file
+	nmap <silent> <leader>ev :e $MYVIMRC<CR>
+	nmap <silent> <leader>sv :so $MYVIMRC<CR>
+
 	" Remap page up/down to navigate between buffers
-	map <A-h> :bp<CR>
-	map <A-l> :bn<CR>
-	map <A-w> <Plug>Kwbd<CR>
+	nnoremap <A-h> :bp<CR>
+	nnoremap <C-PageUp> :bp<CR>
+	nnoremap <A-l> :bn<CR>
+	nnoremap <C-PageDown> :bn<CR>
+	nnoremap <A-w> <Plug>Kwbd<CR>
 
 	" This enable easy moving between windows
 	nnoremap <C-h> <C-w>h
@@ -399,15 +515,30 @@
 	nnoremap <C-l> <C-w>l
 
 	" Enable text search with Ctrl-f
-	nmap <C-f> /
-	imap <C-f> <Esc>/
+	nnoremap <C-f> /
+	inoremap <C-f> <Esc>/
+
+	" Show the outline window and already start searching
+	
+
+	" Open CtrlP to search a name of open buffer
+	nnoremap <A-p> :CtrlPBuffer<CR>
+	inoremap <A-p> <Esc>:CtrlPBuffer<CR>
 
 	" Switch between header and source files
-	imap <C-Tab> <Esc>:A<CR>a
-	map <C-Tab> :A<CR>
+	inoremap <C-Tab> <Esc>:A<CR>a
+	nnoremap <C-Tab> :A<CR>
 
 	" Toggle commentaries
 	map <C-S-c> <plug>NERDCommenterInvert<CR>
+
+	" Toggle english spell and grammar checker
+	nnoremap <F2>	:call ToggleEnglishChecker()<CR>
+	nnoremap <S-F2> 1z=
+	nnoremap <F3> [s
+	nnoremap <F4> ]s
+
+
 
 	" Toggle between the window of NERDtree (showing files) and that of
 	" Tagbar (Exuberang CTags)
@@ -423,6 +554,9 @@
 	nmap <silent> <C-S> :update<CR>
 	imap <silent> <C-S> <Esc>:update<CR>a
 
+	" Format the current paragraph using 80-columns
+	nmap <C-A-f> <ESC>vipgq
+	imap <C-A-f> <ESC>vipgqa
 
 
 
@@ -435,26 +569,54 @@
 " ---------------------------------------------
 " Begin my custom funcs -------------------------
 
-function SwitchLeftPannel()
- 	if exists("g:isNerdTreeVisible") == 0
- 		let g:isNerdTreeVisible = 0
- 	endif
- 
-	if g:isNerdTreeVisible == 1 
-		NERDTreeClose
-		TagbarOpen
-		wincmd h
-	else
-		TagbarClose
-		NERDTree
-	endif
+	function! SwitchLeftPannel()
+		if exists("g:isNerdTreeVisible") == 0
+			let g:isNerdTreeVisible = 0
+		endif
+	
+		if g:isNerdTreeVisible == 1 
+			NERDTreeClose
+			TagbarOpen
+			wincmd h
+		else
+			TagbarClose
+			NERDTree
+		endif
 
-	let g:isNerdTreeVisible = ! g:isNerdTreeVisible
-endfunction
+		let g:isNerdTreeVisible = ! g:isNerdTreeVisible
+	endfunction
+
+	function! ToggleEnglishChecker()
+		if exists("g:isEnglishCheckerActive") == 0
+			let g:isEnglishCheckerActive = 0
+		endif
+
+		if g:isEnglishCheckerActive == 1
+			LanguageToolClear
+			set nocursorline
+			set nospell
+			hi clear SpellBad
+		else
+			LanguageToolCheck
+			set nocursorline
+			hi SpellBad gui=underline,bold guifg=black guibg=orange
+			set spell spelllang=en_us
+		endif
+
+		let g:isEnglishCheckerActive = ! g:isEnglishCheckerActive
+	endfunction
+
+
+	function! BrightHighlightOn()
+		hi CursorLine ctermbg=gray ctermfg=black
+	endfunction
+
+	function! BrightHighlightOff()
+		hi CursorLine ctermbg=black ctermfg=gray
+	endfunction
 
 
 " End my custom funcs -------------------------
 " ---------------------------------------------
-
 
 
