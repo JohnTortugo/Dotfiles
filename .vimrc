@@ -10,9 +10,10 @@
 " General Mappings:
 " <leader>ev	-> Edit .vimrc
 " <leader>sv	-> Source .vimrc
+"
+" m.			-> Remove existing or place the next available local mark
 " 
 " C-S-c 		-> Toggle comment of the selected lines
-" C-f 			-> Activate search
 " A-p			-> Open CtrlP file search
 " C-s			-> Save the current file
 " C-A-f 		-> Format the current paragraph with 80 columns
@@ -34,6 +35,7 @@
 " A-w			-> Close the current tab
 "
 " F2			-> Enable the spell and english grammar checker 
+" F7			-> Display the current buffer's markers
 " F8			-> Toggle NerdTree/Taglist visibility
 " F9			-> Execute make run
 " F10			-> Execute make rebuild-run
@@ -90,7 +92,11 @@
 		NeoBundle 'tpope/vim-fugitive'
 		NeoBundle 'terryma/vim-multiple-cursors'
 		NeoBundle 'mhinz/vim-startify'
-"		NeoBundle 'languagetool-org/languagetool'
+		NeoBundle 'kshenoy/vim-signature'
+		NeoBundle 'jiangmiao/auto-pairs'
+		"NeoBundle 'Raimondi/delimitMate'
+		"NeoBundle 'Townk/vim-autoclose'
+		"NeoBundle 'languagetool-org/languagetool'
 
 		" Did not like these:
 		"NeoBundle 'ervandew/supertab'
@@ -361,7 +367,7 @@
 
 	" This is reaaaaaaallyyy coool man, it will change the opening buffer of
 	" vim to a more cooler one =)))
-	let g:startify_custom_header = map(split(system('fortune | cowsay -f $(find /usr/local/share/cows/ | shuf -n1)'), '\n'), '"   ". v:val') + ['','']
+	let g:startify_custom_header = map(split(system('fortune | cowsay -f $(find /usr/share/cowsay/cows/ | shuf -n1)'), '\n'), '"   ". v:val') + ['','']
 
 	" Make NERDTree reuse the Startify buffer
 	autocmd User Startified setlocal buftype=
@@ -377,7 +383,7 @@
 " ----------------------------------------------------------------------------
 " Begin LanguageTool configs ---------------------------------------------------
 
-	let g:languagetool_jar='/opt/LanguageTool-3.1/languagetool-commandline.jar'
+"	let g:languagetool_jar='/opt/LanguageTool-3.1/languagetool-commandline.jar'
 
 " End LanguageTool configuration ---------------------
 " ---------------------------------------------
@@ -538,6 +544,8 @@
 	nnoremap <F3> [s
 	nnoremap <F4> ]s
 
+	" Show the current buffer's list of markers
+	nnoremap <F7> :SignatureListMarks<CR>
 
 
 	" Toggle between the window of NERDtree (showing files) and that of
