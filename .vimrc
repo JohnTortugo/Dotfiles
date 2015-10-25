@@ -93,12 +93,12 @@
 		NeoBundle 'terryma/vim-multiple-cursors'
 		NeoBundle 'mhinz/vim-startify'
 		NeoBundle 'kshenoy/vim-signature'
-		NeoBundle 'jiangmiao/auto-pairs'
-		"NeoBundle 'Raimondi/delimitMate'
+		NeoBundle 'Raimondi/delimitMate'
 		"NeoBundle 'Townk/vim-autoclose'
 		"NeoBundle 'languagetool-org/languagetool'
 
 		" Did not like these:
+		"NeoBundle 'jiangmiao/auto-pairs' " have an UD behavior in somecases"
 		"NeoBundle 'ervandew/supertab'
 		"NeoBundle 'Valloric/YouCompleteMe'
 		"NeoBundle 'rdnetto/YCM-Generator'
@@ -170,9 +170,18 @@
 	" let g:ctrlp_root_markers = ['']
 	
 
-	let g:ctrlp_extensions = ['tag', 'buffertag', 'quickfix', 'dir', 'rtscript', 'undo', 'line', 'changes', 'mixed', 'bookmarkdir']
+	let g:ctrlp_extensions = ['buffertag', 'quickfix', 'dir', 'rtscript', 'undo', 'line', 'changes', 'mixed', 'bookmarkdir']
 
 	let g:ctrlp_buffer_func = { 'enter': 'BrightHighlightOn', 'exit':  'BrightHighlightOff', }
+
+	let g:ctrlp_buftag_types = {
+		\ 'erlang'     : '--language-force=erlang --erlang-types=drmf',
+		\ 'c++'			: '-R --c++-kinds=+p --fields=+iaS --extra=+q',
+		\ 'javascript' : {
+		\ 'bin': 'jsctags',
+		\ 'args': '-f -',
+		\ },
+		\ }
 
 " End CtrlP configuration ---------------------
 " ---------------------------------------------
@@ -251,13 +260,13 @@
 	let g:syntastic_warning_symbol = "⚠"
 
 	" This makes the left gutter always visible
-	autocmd BufEnter * sign define dummy
-	autocmd BufEnter * execute 'sign place 9999 line=1 name=dummy buffer=' . bufnr('')
-	highlight SignColumn ctermfg=2 ctermbg=NONE
+	autocmd BufWinEnter * if &buftype == 'nofile' | sign define dummy | endif
+	autocmd BufWinEnter * if &buftype == 'nofile' | execute 'sign place 9999 line=1 name=dummy buffer=' . bufnr('') | endif
+	highlight SignColumn ctermfg=2 ctermbg=NONE guifg=gray guibg=yellow
 
 	" Set the fg/bg color of warning/error lines
-	highlight YcmErrorSign ctermfg=2 ctermbg=NONE
-	highlight YcmWarningSign ctermfg=2 ctermbg=NONE
+	" highlight YcmErrorSign ctermfg=2 ctermbg=NONE
+	" highlight YcmWarningSign ctermfg=2 ctermbg=NONE
 
 
 " End Syntastic configuration ---------------------
@@ -367,7 +376,7 @@
 
 	" This is reaaaaaaallyyy coool man, it will change the opening buffer of
 	" vim to a more cooler one =)))
-	let g:startify_custom_header = map(split(system('fortune | cowsay -f $(find /usr/share/cowsay/cows/ | shuf -n1)'), '\n'), '"   ". v:val') + ['','']
+	let g:startify_custom_header = map(split(system('fortune | cowsay -f $(find /usr/local/share/cows/ | shuf -n1)'), '\n'), '"   ". v:val') + ['','']
 
 	" Make NERDTree reuse the Startify buffer
 	autocmd User Startified setlocal buftype=
@@ -383,7 +392,7 @@
 " ----------------------------------------------------------------------------
 " Begin LanguageTool configs ---------------------------------------------------
 
-"	let g:languagetool_jar='/opt/LanguageTool-3.1/languagetool-commandline.jar'
+	let g:languagetool_jar='/opt/LanguageTool-3.1/languagetool-commandline.jar'
 
 " End LanguageTool configuration ---------------------
 " ---------------------------------------------
@@ -392,7 +401,7 @@
 
 
 
-
+let delimitMate_expand_cr = 1
 
 
 
@@ -414,6 +423,7 @@
 
 
 
+	set nocompatible
 	set encoding=utf-8
 	set mouse=a									" Enable the use of the mouse
 	set number									" Shows the line number
@@ -434,12 +444,11 @@
 	set whichwrap+=<,>,h,l,[,]					" let the cursor jump to the previous/next line when moving
 	set history=1000         					" remember more commands and search history
 	set undolevels=1000      					" use many muchos levels of undo
-	set wildignore=*.swp,*.bak,*.pyc,*.class
+	set wildignore=*.swp,*.bak,*.pyc,*.class,*.o,*.png,*.pdf
 	set title                					" change the terminal's title
 	"set visualbell           					" don't beep
 	set noerrorbells         					" don't beep
 	set fillchars+=stl:\ ,stlnc:\
-	set nocompatible
 	set nobackup
 	set noswapfile
 	set ruler
@@ -626,5 +635,4 @@
 
 " End my custom funcs -------------------------
 " ---------------------------------------------
-
 
