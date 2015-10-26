@@ -10,6 +10,10 @@
 " General Mappings:
 " <leader>ev	-> Edit .vimrc
 " <leader>sv	-> Source .vimrc
+" <leader>ih	-> Switches to file under cursor
+" <leader>lo	-> Open location list
+" <leader>lq	-> Close location list
+" <leader>f		-> Start search
 "
 " m.			-> Remove existing or place the next available local mark
 " 
@@ -21,7 +25,7 @@
 " C-p			-> find files using CtrlP
 " A-p       	-> find buffer by name using CtrlP
 " C-m			-> Toggle the folding of the current folder
-" C-f 			-> Search inside the current file
+" C-f			-> [Insert] Start search in current buffer
 " 
 " C-h			-> Move to the right window 
 " C-j			-> Move to the window below
@@ -34,11 +38,18 @@
 " C-PageDown	-> Move to the right tab
 " A-w			-> Close the current tab
 "
+" F1			->
 " F2			-> Enable the spell and english grammar checker 
+" F3			-> Goto prev spelling error
+" F4			-> GoTo next spelling error
+" F5			->
+" F6			-> Use YCM GoTo Definition/Declaration
 " F7			-> Display the current buffer's markers
 " F8			-> Toggle NerdTree/Taglist visibility
 " F9			-> Execute make run
 " F10			-> Execute make rebuild-run
+" F11			->
+" F12			->
 " 
 " Multicursor:
 " C-c			-> Enter in multi cursor mode or goes to next match
@@ -94,19 +105,20 @@
 		NeoBundle 'mhinz/vim-startify'
 		NeoBundle 'kshenoy/vim-signature'
 		NeoBundle 'Raimondi/delimitMate'
+		NeoBundle 'vim-scripts/a.vim'
+		NeoBundle 'rbgrouleff/bclose.vim'
+		NeoBundle 'Valloric/YouCompleteMe'
+		NeoBundle 'rdnetto/YCM-Generator'
+
 		"NeoBundle 'Townk/vim-autoclose'
 		"NeoBundle 'languagetool-org/languagetool'
 
 		" Did not like these:
-		"NeoBundle 'jiangmiao/auto-pairs' " have an UD behavior in somecases"
-		"NeoBundle 'ervandew/supertab'
-		"NeoBundle 'Valloric/YouCompleteMe'
-		"NeoBundle 'rdnetto/YCM-Generator'
+		" Clang-Complete					" crash sometimes and is slow
+		" NeoBundle 'jiangmiao/auto-pairs' 	" have an UD behavior in somecases
+		" NeoBundle 'ervandew/supertab'
 		
 		" I use these but without NeoBundle support
-		" 	A.vim
-		" 	Bclose.vim
-		" 	Clang Complete
 		" 	Nerd Commenter
 		" 	LanguageTool (the tool + vim plugin)
 
@@ -274,57 +286,88 @@
 
 
 
+" ----------------------------------------------------------------------------
+" Begin You-Complete-Me configuration ----------------------------------------
 
+	" This will essentially disable YCM completion for identifiers. It will
+	" only works for semantic actions. i.e., when we try to access fields.
+	let g:ycm_min_num_of_chars_for_completion=100
 
+	let g:ycm_filetype_blacklist = {
+		\ 'tagbar' : 1,
+		\ 'qf' : 1,
+		\ 'tex' : 1,
+		\ 'notes' : 1,
+		\ 'markdown' : 1,
+		\ 'unite' : 1,
+		\ 'text' : 1,
+		\ 'vimwiki' : 1,
+		\ 'pandoc' : 1,
+		\ 'infolog' : 1,
+		\ 'mail' : 1
+		\}
 
+	let g:ycm_always_populate_location_list = 1
 
+	" Close the preview after an option is accept
+	let g:ycm_add_preview_to_completeopt = 1
+
+	" Close the preview when leaving from insert mode
+	let g:ycm_autoclose_preview_window_after_insertion = 1
+
+	" Will open the location list when an error is diagnosed
+	let g:ycm_always_populate_location_list = 1
+	let g:ycm_open_loclist_on_ycm_diags = 1
+
+" End YCM configuration ------------------------------------------------------
+" ----------------------------------------------------------------------------
 
 
 " ---------------------------------------------
 " Clang-complete configuration -------------------------
-
-	let g:clang_user_options='|| exit 0'
-	let g:clang_library_path = '/usr/lib/llvm-3.5/lib/'
-	let g:clang_use_library=1
-	let g:clang_sort_algo = 'alpha'
-	let g:clang_memory_percent=70
-	let g:clang_jumpto_declaration_key='<F4>'
-	
-	" Open quick-fix on error
-	let g:clang_complete_copen=1
-
-	" If it should complete code patterns like for and ifs
-	let g:clang_complete_patterns=0
-
-	" Set this to 0 if you don't want autoselect, 1 if you want autohighlight,
-	" and 2 if you want autoselect. 0 will make you arrow down to select the first
-	" option, 1 will select the first option for you, but won't insert it unless you
-	" press enter. 2 will automatically insert what it thinks is right. 1 is the most
-	" convenient IMO, and it defaults to 0.
-	let g:clang_auto_select=1
-
-	" this has something to do with characters that are invisible
-	set conceallevel=2
-	set concealcursor=vin
-
-	" Set the clang_complete engine of snippets, may we someday I change to
-	" ultisnips
-	let g:clang_snippets=1
-	let g:clang_conceal_snippets=1
-	let g:clang_snippets_engine='clang_complete'
-
-	" Tells that ccomp should understand macros
-	let g:clang_complete_macros = 1
-
-	" If you prefer the Omni-Completion tip window to close when a selection is
-	" made, these lines close it on movement in insert mode or when leaving
-	" insert mode
-	autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
-	autocmd InsertLeave * if pumvisible() == 0|pclose|endif
-
-	highlight Pmenu ctermfg=white ctermbg=darkgray
-	highlight PmenuSel ctermfg=darkgray  ctermbg=white
-
+"
+"	let g:clang_user_options='|| exit 0'
+"	let g:clang_library_path = '/usr/lib/llvm-3.5/lib/'
+"	let g:clang_use_library=1
+"	let g:clang_sort_algo = 'alpha'
+"	let g:clang_memory_percent=70
+"	let g:clang_jumpto_declaration_key='<F4>'
+"	
+"	" Open quick-fix on error
+"	let g:clang_complete_copen=1
+"
+"	" If it should complete code patterns like for and ifs
+"	let g:clang_complete_patterns=0
+"
+"	" Set this to 0 if you don't want autoselect, 1 if you want autohighlight,
+"	" and 2 if you want autoselect. 0 will make you arrow down to select the first
+"	" option, 1 will select the first option for you, but won't insert it unless you
+"	" press enter. 2 will automatically insert what it thinks is right. 1 is the most
+"	" convenient IMO, and it defaults to 0.
+"	let g:clang_auto_select=1
+"
+"	" this has something to do with characters that are invisible
+"	set conceallevel=2
+"	set concealcursor=vin
+"
+"	" Set the clang_complete engine of snippets, may we someday I change to
+"	" ultisnips
+"	let g:clang_snippets=1
+"	let g:clang_conceal_snippets=1
+"	let g:clang_snippets_engine='clang_complete'
+"
+"	" Tells that ccomp should understand macros
+"	let g:clang_complete_macros = 1
+"
+"	" If you prefer the Omni-Completion tip window to close when a selection is
+"	" made, these lines close it on movement in insert mode or when leaving
+"	" insert mode
+"	autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
+"	autocmd InsertLeave * if pumvisible() == 0|pclose|endif
+"
+"	highlight Pmenu ctermfg=white ctermbg=darkgray
+"	highlight PmenuSel ctermfg=darkgray  ctermbg=white
+" 
 " End Clang-complete configuration ---------------------
 " ---------------------------------------------
 
@@ -399,11 +442,13 @@
 
 
 
+" ----------------------------------------------------------------------------
+" Begin DelimitMate configuration --------------------------------------------
 
+	let delimitMate_expand_cr = 1
 
-let delimitMate_expand_cr = 1
-
-
+" End DelimitMate configuration ----------------------------------------------
+" ----------------------------------------------------------------------------
 
 
 
@@ -515,13 +560,16 @@ let delimitMate_expand_cr = 1
 	" Quickly edit/reload the vimrc file
 	nmap <silent> <leader>ev :e $MYVIMRC<CR>
 	nmap <silent> <leader>sv :so $MYVIMRC<CR>
+	nmap <silent> <leader>ih :IH<CR>
+	nmap <silent> <leader>lo :lopen<CR>
+	nmap <silent> <leader>lq :lclose<CR>
 
 	" Remap page up/down to navigate between buffers
 	nnoremap <A-h> :bp<CR>
 	nnoremap <C-PageUp> :bp<CR>
 	nnoremap <A-l> :bn<CR>
 	nnoremap <C-PageDown> :bn<CR>
-	nnoremap <A-w> <Plug>Kwbd<CR>
+	nnoremap <A-w> :Bclose<CR>
 
 	" This enable easy moving between windows
 	nnoremap <C-h> <C-w>h
@@ -530,7 +578,7 @@ let delimitMate_expand_cr = 1
 	nnoremap <C-l> <C-w>l
 
 	" Enable text search with Ctrl-f
-	nnoremap <C-f> /
+	nnoremap <leader>f /
 	inoremap <C-f> <Esc>/
 
 	" Show the outline window and already start searching
@@ -553,9 +601,11 @@ let delimitMate_expand_cr = 1
 	nnoremap <F3> [s
 	nnoremap <F4> ]s
 
+	" Just a handy map to jump to definition/declaration
+	nnoremap <F6> :YcmCompleter GoTo<CR>
+
 	" Show the current buffer's list of markers
 	nnoremap <F7> :SignatureListMarks<CR>
-
 
 	" Toggle between the window of NERDtree (showing files) and that of
 	" Tagbar (Exuberang CTags)
