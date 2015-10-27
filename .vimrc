@@ -6,6 +6,8 @@
 " 	Update the Clang-Complete path
 " 	Update the Fortune/Cowsay path
 " 	Update the Language tool path
+" 	I use the Universal Exuberant CTags
+" 		https://github.com/universal-ctags/ctags/
 "
 " General Mappings:
 " <leader>ev	-> Edit .vimrc
@@ -18,10 +20,10 @@
 " m.			-> Remove existing or place the next available local mark
 " 
 " C-S-c 		-> Toggle comment of the selected lines
-" A-p			-> Open CtrlP file search
 " C-s			-> Save the current file
 " C-A-f 		-> Format the current paragraph with 80 columns
 " C-Tab			-> switch between .c/.h or .cpp/.h
+" A-p			-> Open CtrlP file search
 " C-p			-> find files using CtrlP
 " A-p       	-> find buffer by name using CtrlP
 " C-m			-> Toggle the folding of the current folder
@@ -109,6 +111,8 @@
 		NeoBundle 'rbgrouleff/bclose.vim'
 		NeoBundle 'Valloric/YouCompleteMe'
 		NeoBundle 'rdnetto/YCM-Generator'
+		NeoBundle 'craigemery/vim-autotag'
+		NeoBundle 'NLKNguyen/papercolor-theme'
 
 		"NeoBundle 'Townk/vim-autoclose'
 		"NeoBundle 'languagetool-org/languagetool'
