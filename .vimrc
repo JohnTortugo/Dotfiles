@@ -113,6 +113,7 @@
 		NeoBundle 'rdnetto/YCM-Generator'
 		NeoBundle 'craigemery/vim-autotag'
 		NeoBundle 'NLKNguyen/papercolor-theme'
+		NeoBundle 'mileszs/ack.vim'
 
 		"NeoBundle 'Townk/vim-autoclose'
 		"NeoBundle 'languagetool-org/languagetool'
@@ -261,30 +262,26 @@
 
 " ---------------------------------------------
 " Syntastic configuration -------------------------
-
-	let g:syntastic_cpp_compiler_options = ' -std=c++11'
-
-	set statusline+=%#warningmsg#
-	set statusline+=%{SyntasticStatuslineFlag()}
-	set statusline+=%*
-
-	let g:syntastic_always_populate_loc_list = 1
-	let g:syntastic_auto_loc_list = 1
-	let g:syntastic_check_on_open = 0
-	let g:syntastic_check_on_wq = 1
-	let g:syntastic_error_symbol = "✗"
-	let g:syntastic_warning_symbol = "⚠"
-
-	" This makes the left gutter always visible
-	autocmd BufWinEnter * if &buftype == 'nofile' | sign define dummy | endif
-	autocmd BufWinEnter * if &buftype == 'nofile' | execute 'sign place 9999 line=1 name=dummy buffer=' . bufnr('') | endif
-	highlight SignColumn ctermfg=2 ctermbg=NONE guifg=gray guibg=yellow
-
-	" Set the fg/bg color of warning/error lines
-	" highlight YcmErrorSign ctermfg=2 ctermbg=NONE
-	" highlight YcmWarningSign ctermfg=2 ctermbg=NONE
-
-
+"
+"	let g:syntastic_cpp_compiler_options = ' -std=c++11'
+"
+"	set statusline+=%#warningmsg#
+"	set statusline+=%{SyntasticStatuslineFlag()}
+"	set statusline+=%*
+"
+"	let g:syntastic_always_populate_loc_list = 1
+"	let g:syntastic_auto_loc_list = 1
+"	let g:syntastic_check_on_open = 0
+"	let g:syntastic_check_on_wq = 1
+"	let g:syntastic_error_symbol = "✗"
+"	let g:syntastic_warning_symbol = "⚠"
+"
+"
+"	" Set the fg/bg color of warning/error lines
+"	" highlight YcmErrorSign ctermfg=2 ctermbg=NONE
+"	" highlight YcmWarningSign ctermfg=2 ctermbg=NONE
+"
+"
 " End Syntastic configuration ---------------------
 " ---------------------------------------------
 
@@ -322,6 +319,11 @@
 	" Will open the location list when an error is diagnosed
 	let g:ycm_always_populate_location_list = 1
 	let g:ycm_open_loclist_on_ycm_diags = 1
+
+	" Tells YCM to not confirm opening .ycm files
+	let g:ycm_confirm_extra_conf = 0
+
+	let g:ycm_collect_identifiers_from_tags_files = 1
 
 " End YCM configuration ------------------------------------------------------
 " ----------------------------------------------------------------------------
@@ -511,20 +513,20 @@
 	autocmd InsertLeave * :setlocal hlsearch
 
 
-	" required to always show the status bar of 'powerline'
-	set laststatus=2
-
 	" syntax highlight
 	syntax on								
 
 	" enable plugins loading and indentation based on filetype
 	filetype plugin indent on					
 
-	" This enable using a GUI colorscheme in a terminal window
-"	set t_Co=256
-"	let g:CSApprox_attr_map = { 'bold' : 'bold', 'italic' : '', 'sp' : '' }
-"	colorscheme molokai
+	" This makes the left gutter always visible
+	autocmd BufWinEnter * if &buftype !=# 'nofile' | execute 'sign define dummy' | endif
+	autocmd BufWinEnter * if &buftype != 'nofile' | execute 'sign place 9999 line=1 name=dummy buffer=' . bufnr('') | endif
+	"highlight SignColumn ctermfg=2 ctermbg=NONE guifg=gray guibg=yellow
 
+	" Set the fg/bg color of warning/error lines
+	highlight YcmErrorSign ctermfg=2 ctermbg=NONE
+	highlight YcmWarningSign ctermfg=2 ctermbg=NONE
 
 	" Jump to the last position when reopening a file
 	if has("autocmd")
@@ -542,6 +544,13 @@
 	set undolevels=1000
 	set undodir=/home/divcesar/.vim/undo
 
+	" Instruct vim to find the tags file in the current directory or anywhere
+	" from here up to $HOME
+	set tags+=./tags;$HOME
+
+	" required to always show the status bar of 'powerline'
+""	set laststatus=0
+
 
 
 
@@ -556,6 +565,12 @@
 	" Remap ';' as ':'	WTF!! now I don't need shift anymore =)))
 	nnoremap	;	:
 	" nnoremap 	:	<nop>
+
+
+	" In normal mode y will copy the word under cursor and p will let
+	" you paste it multiple times
+	" 	nnoremap	y	viwy
+	"	nnoremap	p	pgv
 
 	" Reselect visual block after indent/outdent
 	vnoremap < <gv
@@ -620,6 +635,10 @@
 
 	" Rebuild and execute
 	nmap <F10> :wa <BAR> !make rebuild-run<CR>
+
+	" Rebuild and execute
+	nmap <F12> :wa <BAR> !make CTAGS<CR>
+
 
 	" Save the source
 	nmap <silent> <C-S> :update<CR>
