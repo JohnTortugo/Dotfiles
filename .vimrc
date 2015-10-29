@@ -461,14 +461,6 @@
 " General configs -----------------------------
 	colorscheme molokai
 
-	" Set the leader key
-	" let mapleader = '\\'
-
-	" configure folding behavior
-	" set foldmethod=syntax
-	" set foldcolumn=3     
-	
-	"set relativenumber
 
 
 
@@ -503,6 +495,30 @@
 	set ruler
 	set showcmd
 	set cursorline
+	"set relativenumber
+
+	" Set the leader key
+	let mapleader = ','
+
+	" configure folding behavior
+	set foldmethod=manual
+	set foldcolumn=3     
+	set foldenable
+	set viewoptions+=cursor,folds,slash,unix
+	set viewoptions-=options
+
+	augroup vimrc
+		autocmd BufWritePost *
+		\   if expand('%') != '' && &buftype !~ 'nofile'
+		\|      mkview
+		\|  endif
+		autocmd BufRead *
+		\   if expand('%') != '' && &buftype !~ 'nofile'
+		\|      silent loadview
+		\|  endif
+	augroup END
+
+
 
 	cmap w!! w !sudo tee % >/dev/null
 
@@ -510,6 +526,9 @@
 	autocmd InsertEnter * :setlocal nohlsearch
 	autocmd InsertLeave * :setlocal hlsearch
 
+	" Save and restore foldings when closing/opening buffers
+	autocmd BufWinLeave *.* mkview!
+	autocmd BufWinEnter *.* silent loadview
 
 	" required to always show the status bar of 'powerline'
 	set laststatus=2
