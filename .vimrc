@@ -23,10 +23,7 @@
 " C-s			-> Save the current file
 " C-A-f 		-> Format the current paragraph with 80 columns
 " C-Tab			-> switch between .c/.h or .cpp/.h
-" A-p			-> Open CtrlP file search
-" C-p			-> find files using CtrlP
-" A-p       	-> find buffer by name using CtrlP
-" C-m			-> Toggle the folding of the current folder
+" C-p			-> Open CtrlP file search
 " C-f			-> [Insert] Start search in current buffer
 " 
 " C-h			-> Move to the right window 
@@ -34,11 +31,9 @@
 " C-k			-> Move to the window above
 " C-l			-> Move to the left window 
 "
-" A-h			-> Move to the left tab
 " C-PageUp		-> Move to the left tab
-" A-l			-> Move to the right tab
 " C-PageDown	-> Move to the right tab
-" A-w			-> Close the current tab
+" C-w			-> Close the current tab
 "
 " F1			->
 " F2			-> Enable the spell and english grammar checker 
@@ -58,14 +53,8 @@
 " C-z 	 		-> Go to prev match
 " C-x	 		-> Ignore this match
 
-
-
 "----------------------------------------------
 " End of summary mappings ---------------------
-
-
-
-
 
 "----------------------------------------------
 "NeoBundle Scripts-----------------------------
@@ -75,7 +64,7 @@
 			endif
 
 			" Required:
-			set runtimepath+=/home/divcesar/.vim/bundle/neobundle.vim/
+			set runtimepath+=/home/cesar/.vim/bundle/neobundle.vim/
 		endif
 
 		" Required:
@@ -92,14 +81,15 @@
 		NeoBundle 'ctrlpvim/ctrlp.vim'
 		NeoBundle 'flazz/vim-colorschemes'
 		NeoBundle 'tpope/vim-sensible'
-		NeoBundle 'bling/vim-airline'
+		NeoBundle 'vim-airline/vim-airline'
+		NeoBundle 'vim-airline/vim-airline-themes'
 		NeoBundle 'kien/ctrlp.vim'
 		NeoBundle 'scrooloose/nerdtree'
 		NeoBundle 'Xuyuanp/nerdtree-git-plugin'
 		NeoBundle 'majutsushi/tagbar'
 		NeoBundle 'scrooloose/syntastic'
-        NeoBundle 'MarcWeber/vim-addon-mw-utils'
-        NeoBundle 'tomtom/tlib_vim'
+      	NeoBundle 'MarcWeber/vim-addon-mw-utils'
+      	NeoBundle 'tomtom/tlib_vim'
 		NeoBundle 'honza/vim-snippets.git'
 		NeoBundle 'garbas/vim-snipmate'
 		NeoBundle 'tpope/vim-fugitive'
@@ -114,6 +104,8 @@
 		NeoBundle 'craigemery/vim-autotag'
 		NeoBundle 'NLKNguyen/papercolor-theme'
 		NeoBundle 'mileszs/ack.vim'
+		NeoBundle 'altercation/vim-colors-solarized'
+		NeoBundle 'Shougo/vimshell', { 'rev' : '3787e5' }
 
 		"NeoBundle 'Townk/vim-autoclose'
 		"NeoBundle 'languagetool-org/languagetool'
@@ -127,9 +119,6 @@
 		" 	Nerd Commenter
 		" 	LanguageTool (the tool + vim plugin)
 
-		" You can specify revision/branch/tag.
-		NeoBundle 'Shougo/vimshell', { 'rev' : '3787e5' }
-
 		" Required:
 		call neobundle#end()
 
@@ -142,8 +131,6 @@
 "End NeoBundle Scripts-------------------------
 "----------------------------------------------
 
-
-
 "----------------------------------------------
 "Airline configuration ------------------------
 
@@ -155,10 +142,11 @@
 		let g:airline_symbols = {}
 	endif
 
+	let g:airline_theme='papercolor'
 	let g:airline_left_sep = ''
-	let g:airline_left_alt_sep = ''
+	let g:airline_left_alt_sep = '❯'
 	let g:airline_right_sep = ''
-	let g:airline_right_alt_sep = ''
+	let g:airline_right_alt_sep = '❮'
 	let g:airline_symbols.branch = ''
 	let g:airline_symbols.readonly = ''
 	let g:airline_symbols.linenr = ''
@@ -170,12 +158,8 @@
 	" Show just the filename
 	let g:airline#extensions#tabline#fnamemod = ':t'
 
-
-
 "End Airline configuration --------------------
 "----------------------------------------------
-
-
 
 " ---------------------------------------------
 " CtrlP configuration -------------------------
@@ -185,7 +169,6 @@
 	" When a file with the given name is found the folder is considered
 	" the root folder
 	" let g:ctrlp_root_markers = ['']
-	
 
 	let g:ctrlp_extensions = ['buffertag', 'quickfix', 'dir', 'rtscript', 'undo', 'line', 'changes', 'mixed', 'bookmarkdir']
 
@@ -203,9 +186,6 @@
 " End CtrlP configuration ---------------------
 " ---------------------------------------------
 
-
-
-
 " ---------------------------------------------
 " Begin NERDTree configuration -------------------------
 " This plugin is useful for navigating in the directory/file system hierarchy.
@@ -214,7 +194,7 @@
 " 	<C-m>	Toggle the folding of the current folder
 
 	" Close vim if the only window left is the NERDTree
-	autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+	autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | vnew | endif
 
 	" Tells nerdtree to not display binary files
 	let NERDTreeIgnore=['\.o$', '\.png', '\.pdf']
@@ -237,8 +217,6 @@
 " End NERDTree configuration ---------------------
 " ---------------------------------------------
 
-
-
 " ---------------------------------------------
 " Begin Tagbar configuration -------------------------
 " This plugin is useful for showing the Ctags of the current file.
@@ -258,34 +236,29 @@
 " End Tagbar configuration ---------------------
 " ---------------------------------------------
 
-
-
 " ---------------------------------------------
 " Syntastic configuration -------------------------
-"
-"	let g:syntastic_cpp_compiler_options = ' -std=c++11'
-"
-"	set statusline+=%#warningmsg#
-"	set statusline+=%{SyntasticStatuslineFlag()}
-"	set statusline+=%*
-"
-"	let g:syntastic_always_populate_loc_list = 1
-"	let g:syntastic_auto_loc_list = 1
-"	let g:syntastic_check_on_open = 0
-"	let g:syntastic_check_on_wq = 1
-"	let g:syntastic_error_symbol = "✗"
-"	let g:syntastic_warning_symbol = "⚠"
-"
-"
-"	" Set the fg/bg color of warning/error lines
-"	" highlight YcmErrorSign ctermfg=2 ctermbg=NONE
-"	" highlight YcmWarningSign ctermfg=2 ctermbg=NONE
-"
-"
+
+	let g:syntastic_cpp_compiler_options = ' -std=c++11'
+
+	set statusline+=%#warningmsg#
+	set statusline+=%{SyntasticStatuslineFlag()}
+	set statusline+=%*
+
+	let g:syntastic_always_populate_loc_list = 1
+	let g:syntastic_auto_loc_list = 1
+	let g:syntastic_check_on_open = 0
+	let g:syntastic_check_on_wq = 1
+	let g:syntastic_error_symbol = "✗"
+	let g:syntastic_warning_symbol = "⚠"
+
+
+	" Set the fg/bg color of warning/error lines
+	highlight YcmErrorSign ctermfg=2 ctermbg=NONE
+	highlight YcmWarningSign ctermfg=2 ctermbg=NONE
+
 " End Syntastic configuration ---------------------
 " ---------------------------------------------
-
-
 
 " ----------------------------------------------------------------------------
 " Begin You-Complete-Me configuration ----------------------------------------
@@ -328,57 +301,6 @@
 " End YCM configuration ------------------------------------------------------
 " ----------------------------------------------------------------------------
 
-
-" ---------------------------------------------
-" Clang-complete configuration -------------------------
-"
-"	let g:clang_user_options='|| exit 0'
-"	let g:clang_library_path = '/usr/lib/llvm-3.5/lib/'
-"	let g:clang_use_library=1
-"	let g:clang_sort_algo = 'alpha'
-"	let g:clang_memory_percent=70
-"	let g:clang_jumpto_declaration_key='<F4>'
-"	
-"	" Open quick-fix on error
-"	let g:clang_complete_copen=1
-"
-"	" If it should complete code patterns like for and ifs
-"	let g:clang_complete_patterns=0
-"
-"	" Set this to 0 if you don't want autoselect, 1 if you want autohighlight,
-"	" and 2 if you want autoselect. 0 will make you arrow down to select the first
-"	" option, 1 will select the first option for you, but won't insert it unless you
-"	" press enter. 2 will automatically insert what it thinks is right. 1 is the most
-"	" convenient IMO, and it defaults to 0.
-"	let g:clang_auto_select=1
-"
-"	" this has something to do with characters that are invisible
-"	set conceallevel=2
-"	set concealcursor=vin
-"
-"	" Set the clang_complete engine of snippets, may we someday I change to
-"	" ultisnips
-"	let g:clang_snippets=1
-"	let g:clang_conceal_snippets=1
-"	let g:clang_snippets_engine='clang_complete'
-"
-"	" Tells that ccomp should understand macros
-"	let g:clang_complete_macros = 1
-"
-"	" If you prefer the Omni-Completion tip window to close when a selection is
-"	" made, these lines close it on movement in insert mode or when leaving
-"	" insert mode
-"	autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
-"	autocmd InsertLeave * if pumvisible() == 0|pclose|endif
-"
-"	highlight Pmenu ctermfg=white ctermbg=darkgray
-"	highlight PmenuSel ctermfg=darkgray  ctermbg=white
-" 
-" End Clang-complete configuration ---------------------
-" ---------------------------------------------
-
-
-
 " ----------------------------------------------------------------------------
 " Multiple-cursors configs ---------------------------------------------------
 " This plugin is interesting because it enable us to make changes
@@ -405,11 +327,6 @@
 " End multiple-cursors configuration ---------------------
 " ---------------------------------------------
 
-
-
-
-
-
 " ----------------------------------------------------------------------------
 " Begin Startify configs ---------------------------------------------------
 
@@ -425,18 +342,13 @@
 
 	" This is reaaaaaaallyyy coool man, it will change the opening buffer of
 	" vim to a more cooler one =)))
-	let g:startify_custom_header = map(split(system('fortune | cowsay -f $(find /usr/local/share/cows/ | shuf -n1)'), '\n'), '"   ". v:val') + ['','']
+	let g:startify_custom_header = map(split(system('fortune | cowsay -f $(find /usr/share/cowsay/cows/ | shuf -n1)'), '\n'), '"   ". v:val') + ['','']
 
 	" Make NERDTree reuse the Startify buffer
 	autocmd User Startified setlocal buftype=
 
 " End Startify configuration ---------------------
 " ---------------------------------------------
-
-
-
-
-
 
 " ----------------------------------------------------------------------------
 " Begin LanguageTool configs ---------------------------------------------------
@@ -446,8 +358,6 @@
 " End LanguageTool configuration ---------------------
 " ---------------------------------------------
 
-
-
 " ----------------------------------------------------------------------------
 " Begin DelimitMate configuration --------------------------------------------
 
@@ -456,15 +366,8 @@
 " End DelimitMate configuration ----------------------------------------------
 " ----------------------------------------------------------------------------
 
-
-
-
 " ---------------------------------------------
 " General configs -----------------------------
-	colorscheme molokai
-
-
-
 
 	set nocompatible
 	set encoding=utf-8
@@ -473,6 +376,7 @@
 	set hidden									" Let we change the buffer of the current window without saving it
 	set nowrap									" Do not wrap lines
 	set tabstop=4								" tab width is 4 spaces
+	set expandtab								" Insert spaces instead of tabs
 	set backspace=indent,eol,start				" allow backspacing over everything
 	set autoindent								" always set autoindenting on
 	set copyindent								" Copy the previous indentation on autoindenting
@@ -497,17 +401,26 @@
 	set ruler
 	set showcmd
 	set cursorline
-	"set relativenumber
+	set relativenumber
+
+    " Saving marks and jumps. The '100 tells Vim to save marks and other
+    " information for up to 100 files. The f1 directive tells Vim to also save
+    " global marks (A-Z) when it exits.
+    set viminfo='100,f1
+
+	" When spliting windows/creating new files vim will
+	" create the new window on the right or below if horizontal 
+	" command is used.
+	set splitright
+	set splitbelow
+
+	set background=light
+	colorscheme PaperColor
 
 	" Set the leader key
 	let mapleader = ','
 
-	" configure folding behavior
-	set foldmethod=manual
-	set foldcolumn=3     
-	set foldenable
-	set viewoptions+=cursor,folds,slash,unix
-	set viewoptions-=options
+    let g:PaperColor_Light_Override = { 'cursorline' : '#dfdfff',  'matchparen' : '#d6d6d6', 'comment' : '#8e908c' }
 
 	augroup vimrc
 		autocmd BufWritePost *
@@ -538,15 +451,6 @@
 	" enable plugins loading and indentation based on filetype
 	filetype plugin indent on					
 
-	" This makes the left gutter always visible
-	autocmd BufWinEnter * if &buftype !=# 'nofile' | execute 'sign define dummy' | endif
-	autocmd BufWinEnter * if &buftype != 'nofile' | execute 'sign place 9999 line=1 name=dummy buffer=' . bufnr('') | endif
-	"highlight SignColumn ctermfg=2 ctermbg=NONE guifg=gray guibg=yellow
-
-	" Set the fg/bg color of warning/error lines
-	highlight YcmErrorSign ctermfg=2 ctermbg=NONE
-	highlight YcmWarningSign ctermfg=2 ctermbg=NONE
-
 	" Jump to the last position when reopening a file
 	if has("autocmd")
 	   au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
@@ -567,29 +471,17 @@
 	" from here up to $HOME
 	set tags+=./tags;$HOME
 
-	" required to always show the status bar of 'powerline'
-""	set laststatus=0
 
-
-
-
-
-
-
-
-	" -------------------------------------
-	" -------------------------------------
+    " --------------------------------------------------------------------------
+    " --------------------------------------------------------------------------
 	" Key mappings and remappings
 
 	" Remap ';' as ':'	WTF!! now I don't need shift anymore =)))
 	nnoremap	;	:
-	" nnoremap 	:	<nop>
-
 
 	" In normal mode y will copy the word under cursor and p will let
 	" you paste it multiple times
-	" 	nnoremap	y	viwy
-	"	nnoremap	p	pgv
+	nnoremap	y	viwy
 
 	" Reselect visual block after indent/outdent
 	vnoremap < <gv
@@ -615,12 +507,15 @@
 	nnoremap <C-k> <C-w>k
 	nnoremap <C-l> <C-w>l
 
+	nnoremap <C-w> <Esc>:Kwbd<CR>
+
 	" Enable text search with Ctrl-f
 	nnoremap <leader>f /
 	inoremap <C-f> <Esc>/
 
-	" Show the outline window and already start searching
-	
+    " Highlight all occurrences of a word in vim on double clicking
+    nnoremap <silent> <2-LeftMouse> :let @/='\V\<'.escape(expand('<cword>'), '\').'\>'<cr>:set hls<cr>
+    inoremap <silent> <2-LeftMouse> <ESC>:let @/='\V\<'.escape(expand('<cword>'), '\').'\>'<cr>:set hls<cr>
 
 	" Open CtrlP to search a name of open buffer
 	nnoremap <A-p> :CtrlPBuffer<CR>
@@ -643,7 +538,7 @@
 	nnoremap <F6> :YcmCompleter GoTo<CR>
 
 	" Show the current buffer's list of markers
-	nnoremap <F7> :SignatureListMarks<CR>
+""	nnoremap <F7> :SignatureListMarks<CR>
 
 	" Toggle between the window of NERDtree (showing files) and that of
 	" Tagbar (Exuberang CTags)
@@ -658,7 +553,6 @@
 	" Rebuild and execute
 	nmap <F12> :wa <BAR> !make CTAGS<CR>
 
-
 	" Save the source
 	nmap <silent> <C-S> :update<CR>
 	imap <silent> <C-S> <Esc>:update<CR>a
@@ -667,13 +561,8 @@
 	nmap <C-A-f> <ESC>vipgq
 	imap <C-A-f> <ESC>vipgqa
 
-
-
 " End General configs -------------------------
 " ---------------------------------------------
-
-
-
 
 " ---------------------------------------------
 " Begin my custom funcs -------------------------
@@ -725,6 +614,67 @@
 	endfunction
 
 
+	"more exotic version of original Kwbd script
+	"delete the buffer; keep windows; create a scratch buffer if no buffers left
+	function s:Kwbd(kwbdStage)
+	if(a:kwbdStage == 1)
+		if(!buflisted(winbufnr(0)))
+		bd!
+		return
+		endif
+		let s:kwbdBufNum = bufnr("%")
+		let s:kwbdWinNum = winnr()
+		windo call s:Kwbd(2)
+		execute s:kwbdWinNum . 'wincmd w'
+		let s:buflistedLeft = 0
+		let s:bufFinalJump = 0
+		let l:nBufs = bufnr("$")
+		let l:i = 1
+		while(l:i <= l:nBufs)
+		if(l:i != s:kwbdBufNum)
+			if(buflisted(l:i))
+			let s:buflistedLeft = s:buflistedLeft + 1
+			else
+			if(bufexists(l:i) && !strlen(bufname(l:i)) && !s:bufFinalJump)
+				let s:bufFinalJump = l:i
+			endif
+			endif
+		endif
+		let l:i = l:i + 1
+		endwhile
+		if(!s:buflistedLeft)
+		if(s:bufFinalJump)
+			windo if(buflisted(winbufnr(0))) | execute "b! " . s:bufFinalJump | endif
+		else
+			enew
+			let l:newBuf = bufnr("%")
+			windo if(buflisted(winbufnr(0))) | execute "b! " . l:newBuf | endif
+		endif
+		execute s:kwbdWinNum . 'wincmd w'
+		endif
+		if(buflisted(s:kwbdBufNum) || s:kwbdBufNum == bufnr("%"))
+		execute "bd! " . s:kwbdBufNum
+		endif
+		if(!s:buflistedLeft)
+		set buflisted
+		set bufhidden=delete
+		set buftype=
+		setlocal noswapfile
+		endif
+	else
+		if(bufnr("%") == s:kwbdBufNum)
+		let prevbufvar = bufnr("#")
+		if(prevbufvar > 0 && buflisted(prevbufvar) && prevbufvar != s:kwbdBufNum)
+			b #
+		else
+			bn
+		endif
+		endif
+	endif
+	endfunction
+
+	command! Kwbd call s:Kwbd(1)
+	nnoremap <silent> <Plug>Kwbd :<C-u>Kwbd<CR>
+
 " End my custom funcs -------------------------
 " ---------------------------------------------
-
