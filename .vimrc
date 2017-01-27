@@ -471,6 +471,12 @@
 	" from here up to $HOME
 	set tags+=./tags;$HOME
 
+    " For urxvt, st, xterm, gnome-terminal 3.x and terminals.
+    " Set IBeam shape in insert mode, underline shape in replace mode and
+    " block shape in normal mode.
+    let &t_SI = "\<Esc>[6 q"
+    let &t_SR = "\<Esc>[4 q"
+    let &t_EI = "\<Esc>[2 q"
 
     " --------------------------------------------------------------------------
     " --------------------------------------------------------------------------
@@ -495,11 +501,8 @@
 	nmap <silent> <leader>lq :lclose<CR>
 
 	" Remap page up/down to navigate between buffers
-	nnoremap <A-h> :bp<CR>
-	nnoremap <C-PageUp> :bp<CR>
-	nnoremap <A-l> :bn<CR>
-	nnoremap <C-PageDown> :bn<CR>
-	nnoremap <A-w> :Bclose<CR>
+	nnoremap <C-n> :bp<CR>
+	nnoremap <C-m> :bn<CR>
 
 	" This enable easy moving between windows
 	nnoremap <C-h> <C-w>h
@@ -517,10 +520,6 @@
     nnoremap <silent> <2-LeftMouse> :let @/='\V\<'.escape(expand('<cword>'), '\').'\>'<cr>:set hls<cr>
     inoremap <silent> <2-LeftMouse> <ESC>:let @/='\V\<'.escape(expand('<cword>'), '\').'\>'<cr>:set hls<cr>
 
-	" Open CtrlP to search a name of open buffer
-	nnoremap <A-p> :CtrlPBuffer<CR>
-	inoremap <A-p> <Esc>:CtrlPBuffer<CR>
-
 	" Switch between header and source files
 	inoremap <C-Tab> <Esc>:A<CR>a
 	nnoremap <C-Tab> :A<CR>
@@ -536,9 +535,6 @@
 
 	" Just a handy map to jump to definition/declaration
 	nnoremap <F6> :YcmCompleter GoTo<CR>
-
-	" Show the current buffer's list of markers
-""	nnoremap <F7> :SignatureListMarks<CR>
 
 	" Toggle between the window of NERDtree (showing files) and that of
 	" Tagbar (Exuberang CTags)
@@ -604,7 +600,6 @@
 		let g:isEnglishCheckerActive = ! g:isEnglishCheckerActive
 	endfunction
 
-
 	function! BrightHighlightOn()
 		hi CursorLine ctermbg=gray ctermfg=black
 	endfunction
@@ -613,64 +608,63 @@
 		hi CursorLine ctermbg=black ctermfg=gray
 	endfunction
 
-
 	"more exotic version of original Kwbd script
 	"delete the buffer; keep windows; create a scratch buffer if no buffers left
-	function s:Kwbd(kwbdStage)
-	if(a:kwbdStage == 1)
-		if(!buflisted(winbufnr(0)))
-		bd!
-		return
-		endif
-		let s:kwbdBufNum = bufnr("%")
-		let s:kwbdWinNum = winnr()
-		windo call s:Kwbd(2)
-		execute s:kwbdWinNum . 'wincmd w'
-		let s:buflistedLeft = 0
-		let s:bufFinalJump = 0
-		let l:nBufs = bufnr("$")
-		let l:i = 1
-		while(l:i <= l:nBufs)
-		if(l:i != s:kwbdBufNum)
-			if(buflisted(l:i))
-			let s:buflistedLeft = s:buflistedLeft + 1
-			else
-			if(bufexists(l:i) && !strlen(bufname(l:i)) && !s:bufFinalJump)
-				let s:bufFinalJump = l:i
-			endif
-			endif
-		endif
-		let l:i = l:i + 1
-		endwhile
-		if(!s:buflistedLeft)
-		if(s:bufFinalJump)
-			windo if(buflisted(winbufnr(0))) | execute "b! " . s:bufFinalJump | endif
-		else
-			enew
-			let l:newBuf = bufnr("%")
-			windo if(buflisted(winbufnr(0))) | execute "b! " . l:newBuf | endif
-		endif
-		execute s:kwbdWinNum . 'wincmd w'
-		endif
-		if(buflisted(s:kwbdBufNum) || s:kwbdBufNum == bufnr("%"))
-		execute "bd! " . s:kwbdBufNum
-		endif
-		if(!s:buflistedLeft)
-		set buflisted
-		set bufhidden=delete
-		set buftype=
-		setlocal noswapfile
-		endif
-	else
-		if(bufnr("%") == s:kwbdBufNum)
-		let prevbufvar = bufnr("#")
-		if(prevbufvar > 0 && buflisted(prevbufvar) && prevbufvar != s:kwbdBufNum)
-			b #
-		else
-			bn
-		endif
-		endif
-	endif
+	function! s:Kwbd(kwbdStage)
+        if(a:kwbdStage == 1)
+            if(!buflisted(winbufnr(0)))
+            bd!
+            return
+            endif
+            let s:kwbdBufNum = bufnr("%")
+            let s:kwbdWinNum = winnr()
+            windo call s:Kwbd(2)
+            execute s:kwbdWinNum . 'wincmd w'
+            let s:buflistedLeft = 0
+            let s:bufFinalJump = 0
+            let l:nBufs = bufnr("$")
+            let l:i = 1
+            while(l:i <= l:nBufs)
+            if(l:i != s:kwbdBufNum)
+                if(buflisted(l:i))
+                let s:buflistedLeft = s:buflistedLeft + 1
+                else
+                if(bufexists(l:i) && !strlen(bufname(l:i)) && !s:bufFinalJump)
+                    let s:bufFinalJump = l:i
+                endif
+                endif
+            endif
+            let l:i = l:i + 1
+            endwhile
+            if(!s:buflistedLeft)
+            if(s:bufFinalJump)
+                windo if(buflisted(winbufnr(0))) | execute "b! " . s:bufFinalJump | endif
+            else
+                enew
+                let l:newBuf = bufnr("%")
+                windo if(buflisted(winbufnr(0))) | execute "b! " . l:newBuf | endif
+            endif
+            execute s:kwbdWinNum . 'wincmd w'
+            endif
+            if(buflisted(s:kwbdBufNum) || s:kwbdBufNum == bufnr("%"))
+            execute "bd! " . s:kwbdBufNum
+            endif
+            if(!s:buflistedLeft)
+            set buflisted
+            set bufhidden=delete
+            set buftype=
+            setlocal noswapfile
+            endif
+        else
+            if(bufnr("%") == s:kwbdBufNum)
+            let prevbufvar = bufnr("#")
+            if(prevbufvar > 0 && buflisted(prevbufvar) && prevbufvar != s:kwbdBufNum)
+                b #
+            else
+                bn
+            endif
+            endif
+        endif
 	endfunction
 
 	command! Kwbd call s:Kwbd(1)
