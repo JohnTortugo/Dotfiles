@@ -1,7 +1,0 @@
-let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =5
-let g:netrw_dirhist_1='/home/divcesar/Dropbox/Doutorado/Experimentos/BDX/DSWP_Parallel/spec-cpu-2006/456.hmmer'
-let g:netrw_dirhist_2='/home/divcesar/Downloads/lapack-3.5.0/INSTALL'
-let g:netrw_dirhist_3='/home/divcesar/Downloads/LibreOffice_4.4.1.2_Linux_x86_deb/readmes'
-let g:netrw_dirhist_4='/home/divcesar/Workspace/libomp_oss/runtime/cmake'
-let g:netrw_dirhist_5='/opt/mtsp/testsuite/Trivias/toy5'
