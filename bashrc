@@ -80,13 +80,13 @@ export EDITOR="gvim"
 export LC_ALL="en_US.UTF-8"
 
 alias ls='ls -lh'
-alias web='chromium'
+alias web='google-chrome'
 alias gvim='gvim -p'
-alias fm='dolphin . &'
-alias term='urxvtc'
+alias fm='nautilus . 2> /dev/null '
 alias pfind='apt-cache search'
-alias pinst='sudo apt-get install'
-alias vtune='amplxe-gui'
+alias pinst='sudo apt install'
+alias c='clear && make clean && make'
+alias m='make'
 
 PS1='[\u@\h \W]\$ '
 

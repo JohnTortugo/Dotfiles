@@ -136,8 +136,8 @@
 
     set rtp+=$HOME/.local/lib/python2.7/site-packages/powerline/bindings/vim/
 
-    " Always show statusline
-    set laststatus=2
+    " Dont show the statusline
+    set laststatus=0
 
     " Use 256 colours (Use this setting only if your terminal supports 256 colours)
     set t_Co=256
@@ -459,7 +459,13 @@
 		\|  endif
 	augroup END
 
+    " Configure GVim font
+    if has('gui_running')
+        set guifont=Inconsolata\ for\ Powerline\ Medium\ 11
 
+        " no toolbar
+        set guioptions-=T  
+    endif
 
 	cmap w!! w !sudo tee % >/dev/null
 
