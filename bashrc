@@ -1,7 +1,11 @@
-# alias to create directory $1 and automatically change to directory $1
-function mk { mkdir $1; cd $1/; }
-
+# alias to create directory $1 and automatically change to directory $1 function mk { mkdir $1; cd $1/; } 
 function send_b44 { scp $1 linaro@10.68.30.44:~/Magicore/testdir/ ; }
+function get_b44 { scp linaro@10.68.30.44:~/Magicore/testdir/$1 . ; }
+
+function send_ultra { scp $1 unicamp@10.68.30.46:~/Magicore/testdir/ ; }
+function get_ultra { scp unicamp@10.68.30.46:~/Magicore/testdir/$1 . ; }
+
+function get_ed { scp divcesar@10.68.30.42:/home/ed/$1 . ; }
 
 function send_lsc { scp $1 divcesar@ssh:~ ; }
 
@@ -9,10 +13,22 @@ function csrc { grep -rnI $1 ; }
 
 function hsrc { history | grep --color $1 ; }
 
-# function to setup shell for developing TaskFinder
-function setup_tf() {
-	export OBJ_ROOT=/home/divcesar/Workspace/llvm-3.7.0.build/
-	export SRC_ROOT=/home/divcesar/Workspace/llvm-3.7.0.src/
+# function to setup shell for developing with BDX+Clang
+function setup_bdx() {
+    export PATH=$PATH:/home/divcesar/Workfolder/DoAcrossClause.build/bin
+    export BLIB=/home/divcesar/Workfolder/DoAcrossClause.src/lib/Transforms/DoAcrossClause-Pass/Release/
+
+    export LD_LIBRARY_PATH=/home/divcesar/Workfolder/openmp/runtime/build/src/:$LD_LIBRARY_PATH
+    export LD_LIBRARY_PATH=/opt/intel/inspector_2017.1.2.497970/lib64/runtime/:$LD_LIBRARY_PATH
+
+    export LIBRARY_PATH=/home/divcesar/Workfolder/openmp/runtime/build/src/:$LIBRARY_PATH
+    export LIBRARY_PATH=/opt/intel/inspector_2017.1.2.497970/lib64/runtime/:$LIBRARY_PATH
+
+    export C_INCLUDE_PATH=$C_INCLUDE_PATH:/home/divcesar/Workfolder/openmp/runtime/build/src/
+    export C_INCLUDE_PATH=$C_INCLUDE_PATH:/opt/intel/inspector_2017.1.2.497970/include/
+
+    export CPLUS_INCLUDE_PATH=$CPLUS_INCLUDE_PATH:/home/divcesar/Workfolder/openmp/runtime/build/src/
+    export CPLUS_INCLUDE_PATH=$CPLUS_INCLUDE_PATH:/opt/intel/inspector_2017.1.2.497970/include/
 }
 
 
@@ -98,6 +114,9 @@ PATH=/home/$USER/Dropbox/Doutorado/Experimentos/src_utils:$PATH
 HISTSIZE=5000
 HISTFILESIZE=10000
 
+# Configuration file for BC
+export BC_ENV_ARGS=~/.bc
+
 # This makes antlr works
 export CLASSPATH=".:/usr/local/lib/antlr-4.5-complete.jar:$CLASSPATH"
 
@@ -173,7 +192,7 @@ fi
 #export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
 # some more ls aliases
-alias ll='ls -alF'
+alias ll='ls -lF'
 alias la='ls -A'
 alias l='ls -CF'
 
