@@ -86,6 +86,7 @@ alias fm='nautilus . 2> /dev/null '
 alias pfind='apt-cache search'
 alias pinst='sudo apt install'
 alias c='clear && make clean && make'
+alias cl='clear && make clean'
 alias m='make'
 
 PS1='[\u@\h \W]\$ '

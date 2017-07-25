@@ -106,6 +106,9 @@
 		NeoBundle 'mileszs/ack.vim'
 		NeoBundle 'altercation/vim-colors-solarized'
 		NeoBundle 'Shougo/vimshell', { 'rev' : '3787e5' }
+		NeoBundle 'hzchirs/vim-material'
+		NeoBundle 'nightsense/vim-crunchbang'
+		NeoBundle 'octol/vim-cpp-enhanced-highlight'
 
 		"NeoBundle 'Townk/vim-autoclose'
 		"NeoBundle 'languagetool-org/languagetool'
@@ -150,16 +153,16 @@
 		let g:airline_symbols = {}
 	endif
 
-	let g:airline_theme='papercolor'
+	let g:airline_theme='badwolf'
 
     "let g:airline_left_sep = '»'
-    let g:airline_left_sep = '▶'
-	"let g:airline_left_sep = ''
+    "let g:airline_left_sep = '▶'
+	let g:airline_left_sep = ''
 	"let g:airline_left_alt_sep = '❯'
 
     "let g:airline_right_sep = '«'
-    let g:airline_right_sep = '◀'
-	"let g:airline_right_sep = ''
+    "let g:airline_right_sep = '◀'
+	let g:airline_right_sep = ''
 	"let g:airline_right_alt_sep = '❮'
 
     "let g:airline_symbols.linenr = '␊'
@@ -324,6 +327,8 @@
 
 	let g:ycm_collect_identifiers_from_tags_files = 1
 
+	let g:ycm_server_python_interpreter="/usr/bin/python2"
+
 " End YCM configuration ------------------------------------------------------
 " ----------------------------------------------------------------------------
 
@@ -440,8 +445,8 @@
 	set splitright
 	set splitbelow
 
-	set background=light
-	colorscheme PaperColor
+	set background=dark
+	colorscheme badwolf
 
 	" Set the leader key
 	let mapleader = ','
